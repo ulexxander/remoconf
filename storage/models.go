@@ -2,6 +2,8 @@ package storage
 
 import "time"
 
+// models
+
 type User struct {
 	ID        int
 	Login     string
@@ -27,4 +29,11 @@ type Config struct {
 	Content   string
 	CreatedAt time.Time
 	CreatedBy int
+}
+
+// params
+
+type UserCreateParams struct {
+	Login    string
+	Password string
 }
