@@ -13,11 +13,11 @@ func NewConfigsStore(db *sqlx.DB) *ConfigsStore {
 	return &ConfigsStore{db}
 }
 
-const configGetAllQuery = `SELECT * FROM configs`
+const configsGetAllQuery = `SELECT * FROM configs`
 
 func (us *ConfigsStore) GetAll() ([]storage.Config, error) {
 	var items []storage.Config
-	if err := us.db.Select(&items, configGetAllQuery); err != nil {
+	if err := us.db.Select(&items, configsGetAllQuery); err != nil {
 		return nil, err
 	}
 	return items, nil
