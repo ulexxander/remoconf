@@ -24,7 +24,7 @@ type Project struct {
 
 type Config struct {
 	ID        int       `db:"id"`
-	ProjectID uint      `db:"project_id"`
+	ProjectID int       `db:"project_id"`
 	Version   int       `db:"version"`
 	Content   string    `db:"content"`
 	CreatedAt time.Time `db:"created_at"`
@@ -42,4 +42,11 @@ type ProjectCreateParams struct {
 	Title       string
 	Description string
 	CreatedBy   int
+}
+
+type ConfigCreateParams struct {
+	ProjectID int
+	Version   int
+	Content   string
+	CreatedBy int
 }

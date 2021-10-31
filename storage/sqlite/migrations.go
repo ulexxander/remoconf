@@ -27,11 +27,23 @@ CREATE TABLE projects (
 	updated_by integer
 		REFERENCES users(id)
 );
+
+CREATE TABLE configs (
+	id integer PRIMARY KEY AUTOINCREMENT,
+	project_id integer NOT NULL
+		REFERENCES projects(id),
+	version integer NOT NULL,
+	content text NOT NULL,
+	created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	created_by integer NOT NULL
+		REFERENCES users(id)
+);
 `
 
 const migrationDown = `
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS configs;
 `
 
 func Migrate(db *sqlx.DB) error {
