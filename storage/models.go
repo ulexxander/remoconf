@@ -37,3 +37,9 @@ type UserCreateParams struct {
 	Login    string
 	Password string
 }
+
+type ProjectCreateParams struct {
+	Title       string
+	Description string
+	CreatedBy   int
+}
