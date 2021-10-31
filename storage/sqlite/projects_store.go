@@ -23,7 +23,7 @@ func (ps *ProjectsStore) GetAll() ([]storage.Project, error) {
 	return items, nil
 }
 
-const createProjectQuery = `INSERT INTO projects (title, description, created_by)
+const projectCreateQuery = `INSERT INTO projects (title, description, created_by)
 VALUES ($1, $2, $3)
 RETURNING id`
 
@@ -31,7 +31,7 @@ func (ps *ProjectsStore) Create(p storage.ProjectCreateParams) (int, error) {
 	var id int
 	if err := ps.db.Get(
 		&id,
-		createProjectQuery,
+		projectCreateQuery,
 		p.Title,
 		p.Description,
 		p.CreatedBy,
