@@ -1,9 +1,8 @@
 package sqlite
 
 import (
-	"fmt"
-
 	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
 	"gitlab.com/ulexxander/remoconf/storage"
 )
 
@@ -32,11 +31,11 @@ DROP TABLE IF EXISTS users
 func (us *UsersStore) Migrate() error {
 	_, err := us.db.Exec(migrationDown)
 	if err != nil {
-		return fmt.Errorf("migration down: %w", err)
+		return errors.Wrap(err, "migration down")
 	}
 	_, err = us.db.Exec(migrationUp)
 	if err != nil {
-		return fmt.Errorf("migration up: %w", err)
+		return errors.Wrap(err, "migration up")
 	}
 	return nil
 }

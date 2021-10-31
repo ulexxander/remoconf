@@ -1,12 +1,12 @@
 package sqlite_test
 
 import (
-	"fmt"
 	"path/filepath"
 	"testing"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/storage"
 	"gitlab.com/ulexxander/remoconf/storage/sqlite"
@@ -60,10 +60,10 @@ func setupDB(dir string) (*sqlx.DB, error) {
 	path := filepath.Join(dir, "sqlite.db")
 	db, err := sqlx.Open("sqlite3", path)
 	if err != nil {
-		return nil, fmt.Errorf("opening: %w", err)
+		return nil, errors.Wrap(err, "opening")
 	}
 	if err := db.Ping(); err != nil {
-		return nil, fmt.Errorf("pinging: %w", err)
+		return nil, errors.Wrap(err, "pinging")
 	}
 	return db, nil
 }
