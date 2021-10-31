@@ -1,17 +1,17 @@
 package sqlite
 
 import (
-	"database/sql"
 	"fmt"
 
+	"github.com/jmoiron/sqlx"
 	"gitlab.com/ulexxander/remoconf/storage"
 )
 
 type UsersStore struct {
-	db *sql.DB
+	db *sqlx.DB
 }
 
-func NewUsersStore(db *sql.DB) *UsersStore {
+func NewUsersStore(db *sqlx.DB) *UsersStore {
 	return &UsersStore{db}
 }
 
@@ -44,15 +44,8 @@ func (us *UsersStore) Migrate() error {
 const getByIDQuery = `SELECT * FROM users WHERE id = $1`
 
 func (us *UsersStore) GetByID(id int) (*storage.User, error) {
-	row := us.db.QueryRow(getByIDQuery, id)
 	var u storage.User
-	if err := row.Scan(
-		&u.ID,
-		&u.Login,
-		&u.Password,
-		&u.CreatedAt,
-		&u.UpdatedAt,
-	); err != nil {
+	if err := us.db.Get(&u, getByIDQuery, id); err != nil {
 		return nil, err
 	}
 	return &u, nil
@@ -63,9 +56,8 @@ VALUES ($1, $2)
 RETURNING id`
 
 func (us *UsersStore) Create(p storage.UserCreateParams) (int, error) {
-	row := us.db.QueryRow(createQuery, p.Login, p.Password)
 	var id int
-	if err := row.Scan(&id); err != nil {
+	if err := us.db.Get(&id, createQuery, p.Login, p.Password); err != nil {
 		return 0, err
 	}
 	return id, nil

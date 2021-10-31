@@ -5,30 +5,30 @@ import "time"
 // models
 
 type User struct {
-	ID        int
-	Login     string
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt *time.Time
+	ID        int        `db:"id"`
+	Login     string     `db:"login"`
+	Password  string     `db:"password"`
+	CreatedAt time.Time  `db:"created_at"`
+	UpdatedAt *time.Time `db:"updated_at"`
 }
 
 type Project struct {
-	ID          int
-	Title       string
-	Description string
-	CreatedAt   time.Time
-	CreatedBy   int
-	UpdatedAt   *time.Time
-	UpdatedBy   *int
+	ID          int        `db:"id"`
+	Title       string     `db:"title"`
+	Description string     `db:"description"`
+	CreatedAt   time.Time  `db:"created_at"`
+	CreatedBy   int        `db:"created_by"`
+	UpdatedAt   *time.Time `db:"updated_at"`
+	UpdatedBy   *int       `db:"updated_by"`
 }
 
 type Config struct {
-	ID        int
-	ProjectID uint
-	Version   int
-	Content   string
-	CreatedAt time.Time
-	CreatedBy int
+	ID        int       `db:"id"`
+	ProjectID uint      `db:"project_id"`
+	Version   int       `db:"version"`
+	Content   string    `db:"content"`
+	CreatedAt time.Time `db:"created_at"`
+	CreatedBy int       `db:"created_by"`
 }
 
 // params

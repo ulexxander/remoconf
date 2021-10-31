@@ -3,6 +3,7 @@ module gitlab.com/ulexxander/remoconf
 go 1.17
 
 require (
+	github.com/jmoiron/sqlx v1.3.4
 	github.com/mattn/go-sqlite3 v1.14.9
 	github.com/stretchr/testify v1.7.0
 )

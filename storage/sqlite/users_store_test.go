@@ -1,11 +1,11 @@
 package sqlite_test
 
 import (
-	"database/sql"
 	"fmt"
 	"path/filepath"
 	"testing"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/storage"
@@ -43,17 +43,22 @@ func TestUsersStore(t *testing.T) {
 	})
 }
 
-func setupDBTest(t *testing.T) *sql.DB {
+func setupDBTest(t *testing.T) *sqlx.DB {
 	db, err := setupDB(t.TempDir())
 	if err != nil {
 		t.Fatalf("failed to setup db: %s", err)
 	}
+	t.Cleanup(func() {
+		if err := db.Close(); err != nil {
+			t.Logf("error closing db: %s", err)
+		}
+	})
 	return db
 }
 
-func setupDB(dir string) (*sql.DB, error) {
+func setupDB(dir string) (*sqlx.DB, error) {
 	path := filepath.Join(dir, "sqlite.db")
-	db, err := sql.Open("sqlite3", path)
+	db, err := sqlx.Open("sqlite3", path)
 	if err != nil {
 		return nil, fmt.Errorf("opening: %w", err)
 	}
