@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/storage"
 	"gitlab.com/ulexxander/remoconf/storage/sqlite"
 )
@@ -20,12 +21,8 @@ func TestUsersStore(t *testing.T) {
 
 	t.Run("user does not exist", func(t *testing.T) {
 		u, err := us.GetByID(1)
-		if err == nil {
-			t.Fatalf("expected error, got nil")
-		}
-		if u != nil {
-			t.Fatalf("expected user to be nil, got %v", u)
-		}
+		require.Error(t, err)
+		require.Nil(t, u)
 	})
 
 	var createdUserID int
@@ -35,20 +32,14 @@ func TestUsersStore(t *testing.T) {
 			Login:    "alex",
 			Password: "123",
 		})
-		if err != nil {
-			t.Fatalf("unexpected error: %s", err)
-		}
+		require.NoError(t, err)
 		createdUserID = id
 	})
 
 	t.Run("getting created user", func(t *testing.T) {
 		u, err := us.GetByID(createdUserID)
-		if err != nil {
-			t.Fatalf("unexpected error: %s", err)
-		}
-		if u == nil {
-			t.Fatalf("user must not be nil")
-		}
+		require.NoError(t, err)
+		require.NotNil(t, u)
 	})
 }
 
