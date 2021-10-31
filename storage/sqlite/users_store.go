@@ -16,11 +16,11 @@ func NewUsersStore(db *sqlx.DB) *UsersStore {
 const userGetByIDQuery = `SELECT * FROM users WHERE id = $1`
 
 func (us *UsersStore) GetByID(id int) (*storage.User, error) {
-	var u storage.User
-	if err := us.db.Get(&u, userGetByIDQuery, id); err != nil {
+	var item storage.User
+	if err := us.db.Get(&item, userGetByIDQuery, id); err != nil {
 		return nil, err
 	}
-	return &u, nil
+	return &item, nil
 }
 
 const userCreateQuery = `INSERT INTO users (login, password)
