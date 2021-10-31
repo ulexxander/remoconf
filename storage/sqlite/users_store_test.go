@@ -15,9 +15,6 @@ import (
 func TestUsersStore(t *testing.T) {
 	db := setupDBTest(t)
 	us := sqlite.NewUsersStore(db)
-	if err := us.Migrate(); err != nil {
-		t.Fatalf("failed migrating: %s", err)
-	}
 
 	t.Run("user does not exist", func(t *testing.T) {
 		u, err := us.GetByID(1)
@@ -64,6 +61,9 @@ func setupDB(dir string) (*sqlx.DB, error) {
 	}
 	if err := db.Ping(); err != nil {
 		return nil, errors.Wrap(err, "pinging")
+	}
+	if err := sqlite.Migrate(db); err != nil {
+		return nil, errors.Wrap(err, "migrating")
 	}
 	return db, nil
 }

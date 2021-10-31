@@ -2,7 +2,6 @@ package sqlite
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
 	"gitlab.com/ulexxander/remoconf/storage"
 )
 
@@ -12,32 +11,6 @@ type UsersStore struct {
 
 func NewUsersStore(db *sqlx.DB) *UsersStore {
 	return &UsersStore{db}
-}
-
-const migrationUp = `
-CREATE TABLE users (
-	id integer PRIMARY KEY AUTOINCREMENT,
-  login text NOT NULL,
-  password text NOT NULL,
-	created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at timestamp
-)
-`
-
-const migrationDown = `
-DROP TABLE IF EXISTS users
-`
-
-func (us *UsersStore) Migrate() error {
-	_, err := us.db.Exec(migrationDown)
-	if err != nil {
-		return errors.Wrap(err, "migration down")
-	}
-	_, err = us.db.Exec(migrationUp)
-	if err != nil {
-		return errors.Wrap(err, "migration up")
-	}
-	return nil
 }
 
 const getByIDQuery = `SELECT * FROM users WHERE id = $1`
