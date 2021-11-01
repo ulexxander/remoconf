@@ -28,6 +28,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "operationId": "GetProjectsAll",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -53,6 +54,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "operationId": "PostProject",
                 "parameters": [
                     {
                         "description": "Project Create Params",
@@ -88,6 +90,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "operationId": "PostUser",
                 "parameters": [
                     {
                         "description": "User Create Params",
@@ -120,6 +123,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "operationId": "GetUserByID",
                 "parameters": [
                     {
                         "type": "integer",

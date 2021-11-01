@@ -6,6 +6,7 @@ import (
 	"gitlab.com/ulexxander/remoconf/storage"
 )
 
+// @ID GetProjectsAll
 // @Produce json
 // @Success 200 {object} []storage.Project
 // @Failure default {object} ResponseError
@@ -19,6 +20,7 @@ func (e *Endpoints) GetProjectsAll(w http.ResponseWriter, r *http.Request) {
 	e.resData(w, res)
 }
 
+// @ID PostProject
 // @Accept json
 // @Produce json
 // @Param params body storage.ProjectCreateParams true "Project Create Params"
