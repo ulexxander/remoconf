@@ -9,6 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/restapi"
+	"gitlab.com/ulexxander/remoconf/service/users"
 	"gitlab.com/ulexxander/remoconf/storage"
 	"gitlab.com/ulexxander/remoconf/storage/sqlite"
 	"gitlab.com/ulexxander/remoconf/testutil"
@@ -56,7 +57,7 @@ func TestUsersEndpoints(t *testing.T) {
 
 func setupAPIClient(t *testing.T) *testutil.APIClient {
 	db := testutil.SetupDBTest(t)
-	us := sqlite.NewUsersStore(db)
+	us := users.NewService(sqlite.NewUsersStore(db))
 	logger := log.New(io.Discard, "", log.LstdFlags)
 	h := restapi.NewHandler(us, logger)
 	serv := httptest.NewServer(h)

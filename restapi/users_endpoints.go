@@ -12,7 +12,7 @@ func (h *Handler) getUserByID(w http.ResponseWriter, r *http.Request) {
 		h.resError(w, err)
 		return
 	}
-	res, err := h.usersStore.GetByID(id)
+	res, err := h.users.GetByID(id)
 	if err != nil {
 		h.resError(w, err)
 		return
@@ -26,7 +26,7 @@ func (h *Handler) postUser(w http.ResponseWriter, r *http.Request) {
 		h.resError(w, err)
 		return
 	}
-	res, err := h.usersStore.Create(p)
+	res, err := h.users.Create(p)
 	if err != nil {
 		h.resError(w, err)
 		return
