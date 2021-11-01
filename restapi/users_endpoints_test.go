@@ -31,11 +31,7 @@ func TestUsersEndpoints(t *testing.T) {
 		res := client.Get(t, fmt.Sprintf("/users/%d", userID), &resBody)
 		require.Empty(t, resBody.Error)
 		require.Equal(t, 200, res.StatusCode)
-
 		require.Equal(t, userID, resBody.Data.ID)
-		require.Equal(t, login, resBody.Data.Login)
 		require.NotEqual(t, password, resBody.Data.Password, "password is hashed")
-		require.NotZero(t, resBody.Data.CreatedAt)
-		require.Nil(t, resBody.Data.UpdatedAt)
 	})
 }
