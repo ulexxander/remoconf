@@ -23,8 +23,12 @@ func (s *Service) Create(p storage.UserCreateParams) (*storage.CreatedItem, erro
 	if err != nil {
 		return nil, errors.Wrap(err, "hashing password")
 	}
-	return s.users.Create(storage.UserCreateParams{
+	created, err := s.users.Create(storage.UserCreateParams{
 		Login:    p.Login,
 		Password: string(passwordHashed),
 	})
+	if err != nil {
+		return nil, errors.Wrap(err, "creating user in db")
+	}
+	return created, nil
 }
