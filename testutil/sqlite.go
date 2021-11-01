@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/jmoiron/sqlx"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/pkg/errors"
 	"gitlab.com/ulexxander/remoconf/storage/sqlite"
 )
