@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/restapi"
 	"gitlab.com/ulexxander/remoconf/service/configs"
@@ -31,7 +32,7 @@ func TestConfigsEndpoints_CRUD(t *testing.T) {
 			Content:   content,
 			CreatedBy: user.ID,
 		}, &resBody)
-		require.Equal(t, 200, res.StatusCode)
+		assert.Equal(t, 200, res.StatusCode)
 		require.Empty(t, resBody.Error)
 		configID = resBody.Data.ID
 	})
@@ -42,7 +43,7 @@ func TestConfigsEndpoints_CRUD(t *testing.T) {
 			restapi.ResponseError
 		}
 		res := client.Get(t, fmt.Sprintf("/projects/%d/configs", project.ID), &resBody)
-		require.Equal(t, 200, res.StatusCode)
+		assert.Equal(t, 200, res.StatusCode)
 		require.Empty(t, resBody.Error)
 		require.Len(t, resBody.Data, 1)
 		require.Equal(t, configID, resBody.Data[0].ID)

@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/restapi"
 	"gitlab.com/ulexxander/remoconf/storage"
@@ -84,8 +85,8 @@ func (ac *APIClient) CreateUser(t *testing.T, login, password string) *storage.C
 		Login:    login,
 		Password: password,
 	}, &resBody)
+	assert.Equal(t, 200, res.StatusCode)
 	require.Empty(t, resBody.Error)
-	require.Equal(t, 200, res.StatusCode)
 	return resBody.Data
 }
 
@@ -103,7 +104,7 @@ func (ac *APIClient) CreateProject(t *testing.T, title, description string, crea
 		Description: description,
 		CreatedBy:   createdBy,
 	}, &resBody)
-	require.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, 200, res.StatusCode)
 	require.Empty(t, resBody.Error)
 	return resBody.Data
 }

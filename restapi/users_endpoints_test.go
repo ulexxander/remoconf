@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/restapi"
 	"gitlab.com/ulexxander/remoconf/storage"
@@ -29,8 +30,8 @@ func TestUsersEndpoints(t *testing.T) {
 			restapi.ResponseError
 		}
 		res := client.Get(t, fmt.Sprintf("/users/%d", userID), &resBody)
+		assert.Equal(t, 200, res.StatusCode)
 		require.Empty(t, resBody.Error)
-		require.Equal(t, 200, res.StatusCode)
 		require.Equal(t, userID, resBody.Data.ID)
 		require.NotEqual(t, password, resBody.Data.Password, "password is hashed")
 	})
