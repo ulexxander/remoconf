@@ -4,6 +4,11 @@ definitions:
       Error:
         type: string
     type: object
+  storage.CreatedItem:
+    properties:
+      ID:
+        type: integer
+    type: object
   storage.User:
     properties:
       CreatedAt:
@@ -17,9 +22,39 @@ definitions:
       UpdatedAt:
         type: string
     type: object
+  storage.UserCreateParams:
+    properties:
+      Login:
+        type: string
+      Password:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
+  /users:
+    post:
+      consumes:
+      - application/json
+      operationId: PostUser
+      parameters:
+      - description: User Create Params
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/storage.UserCreateParams'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/storage.CreatedItem'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/restapi.ResponseError'
   /users/{id}:
     get:
       operationId: GetUserByID

@@ -23,6 +23,42 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/users": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "operationId": "PostUser",
+                "parameters": [
+                    {
+                        "description": "User Create Params",
+                        "name": "params",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/storage.UserCreateParams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/storage.CreatedItem"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/restapi.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/users/{id}": {
             "get": {
                 "produces": [
@@ -64,6 +100,14 @@ var doc = `{
                 }
             }
         },
+        "storage.CreatedItem": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                }
+            }
+        },
         "storage.User": {
             "type": "object",
             "properties": {
@@ -80,6 +124,17 @@ var doc = `{
                     "type": "string"
                 },
                 "UpdatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "storage.UserCreateParams": {
+            "type": "object",
+            "properties": {
+                "Login": {
+                    "type": "string"
+                },
+                "Password": {
                     "type": "string"
                 }
             }
