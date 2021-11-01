@@ -24,29 +24,6 @@ var doc = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/configs": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "operationId": "GetConfigsAll",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/storage.Config"
-                            }
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/restapi.ResponseError"
-                        }
-                    }
-                }
-            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -130,6 +107,40 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/storage.CreatedItem"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/restapi.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/projects/{id}/configs": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "operationId": "GetConfigsByProject",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/storage.Config"
+                            }
                         }
                     },
                     "default": {

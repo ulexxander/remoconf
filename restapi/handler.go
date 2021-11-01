@@ -24,7 +24,7 @@ func (e *Endpoints) Register(m *chi.Mux) {
 	m.Get("/projects", e.GetProjectsAll)
 	m.Post("/projects", e.PostProject)
 
-	m.Get("/configs", e.GetConfigsAll)
+	m.Get("/projects/{id}/configs", e.GetConfigsByProject)
 	m.Post("/configs", e.PostConfig)
 
 	m.Get("/swagger/docs.json", e.GetSwaggerDocs)

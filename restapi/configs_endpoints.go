@@ -6,13 +6,19 @@ import (
 	"gitlab.com/ulexxander/remoconf/service/configs"
 )
 
-// @ID GetConfigsAll
+// @ID GetConfigsByProject
 // @Produce json
+// @Param id path int true "User ID"
 // @Success 200 {object} []storage.Config
 // @Failure default {object} ResponseError
-// @Router /configs [get]
-func (e *Endpoints) GetConfigsAll(w http.ResponseWriter, r *http.Request) {
-	res, err := e.Configs.GetAll()
+// @Router /projects/{id}/configs [get]
+func (e *Endpoints) GetConfigsByProject(w http.ResponseWriter, r *http.Request) {
+	id, err := urlParamInt(r, "id")
+	if err != nil {
+		e.resError(w, err)
+		return
+	}
+	res, err := e.Configs.GetByProject(id)
 	if err != nil {
 		e.resError(w, err)
 		return

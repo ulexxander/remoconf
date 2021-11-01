@@ -83,21 +83,6 @@ info:
   contact: {}
 paths:
   /configs:
-    get:
-      operationId: GetConfigsAll
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/storage.Config'
-            type: array
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/restapi.ResponseError'
     post:
       consumes:
       - application/json
@@ -154,6 +139,28 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/storage.CreatedItem'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/restapi.ResponseError'
+  /projects/{id}/configs:
+    get:
+      operationId: GetConfigsByProject
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/storage.Config'
+            type: array
         default:
           description: ""
           schema:

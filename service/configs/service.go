@@ -13,8 +13,8 @@ func NewService(configs storage.ConfigsStore) *Service {
 	return &Service{configs}
 }
 
-func (s *Service) GetAll() ([]storage.Config, error) {
-	return s.configs.GetAll()
+func (s *Service) GetByProject(id int) ([]storage.Config, error) {
+	return s.configs.GetByProject(id)
 }
 
 type ConfigCreateParams struct {

@@ -1,6 +1,7 @@
 package restapi_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -40,7 +41,7 @@ func TestConfigsEndpoints_CRUD(t *testing.T) {
 			Data []storage.Config
 			restapi.ResponseError
 		}
-		res := client.Get(t, "/configs", &resBody)
+		res := client.Get(t, fmt.Sprintf("/projects/%d/configs", project.ID), &resBody)
 		require.Equal(t, 200, res.StatusCode)
 		require.Empty(t, resBody.Error)
 		require.Len(t, resBody.Data, 1)
@@ -67,8 +68,7 @@ func TestConfigsEndpoints_IncreasesVersion(t *testing.T) {
 	}, &resConf2)
 
 	var resConfs struct{ Data []storage.Config }
-	res := client.Get(t, "/configs", &resConfs)
-	require.Equal(t, 200, res.StatusCode)
+	client.Get(t, fmt.Sprintf("/projects/%d/configs", project.ID), &resConfs)
 	require.Len(t, resConfs.Data, 2)
 
 	require.Equal(t, resConf1.Data.ID, resConfs.Data[0].ID)
