@@ -35,7 +35,7 @@ func NewHandler(users *users.Service, projects *projects.Service, swaggerDocs []
 	mux.Get("/users/{id}", h.GetUserByID)
 	mux.Post("/users", h.PostUser)
 
-	mux.Get("/projects", h.getProjectsAll)
+	mux.Get("/projects", h.GetProjectsAll)
 	mux.Post("/projects", h.PostProject)
 
 	return &h

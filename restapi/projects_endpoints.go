@@ -10,7 +10,7 @@ import (
 // @Success 200 {object} []storage.Project
 // @Failure default {object} ResponseError
 // @Router /projects [get]
-func (h *Handler) getProjectsAll(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetProjectsAll(w http.ResponseWriter, r *http.Request) {
 	res, err := h.projects.GetAll()
 	if err != nil {
 		h.resError(w, err)
