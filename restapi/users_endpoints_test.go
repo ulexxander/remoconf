@@ -9,6 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/restapi"
+	"gitlab.com/ulexxander/remoconf/service/projects"
 	"gitlab.com/ulexxander/remoconf/service/users"
 	"gitlab.com/ulexxander/remoconf/storage"
 	"gitlab.com/ulexxander/remoconf/storage/sqlite"
@@ -24,17 +25,8 @@ func TestUsersEndpoints(t *testing.T) {
 	var userID int
 
 	t.Run("creating user", func(t *testing.T) {
-		var resBody struct {
-			Data storage.CreatedItem
-			restapi.ResponseError
-		}
-		res := client.Post(t, "/users", storage.UserCreateParams{
-			Login:    login,
-			Password: password,
-		}, &resBody)
-		require.Empty(t, resBody.Error)
-		require.Equal(t, 200, res.StatusCode)
-		userID = resBody.Data.ID
+		created := client.CreateUser(t, login, password)
+		userID = created.ID
 	})
 
 	t.Run("getting created user", func(t *testing.T) {
@@ -57,8 +49,9 @@ func TestUsersEndpoints(t *testing.T) {
 func setupAPIClient(t *testing.T) *testutil.APIClient {
 	db := testutil.SetupDBTest(t)
 	us := users.NewService(sqlite.NewUsersStore(db))
+	ps := projects.NewService(sqlite.NewProjectsStore(db))
 	logger := log.New(io.Discard, "", log.LstdFlags)
-	h := restapi.NewHandler(us, logger)
+	h := restapi.NewHandler(us, ps, logger)
 	serv := httptest.NewServer(h)
 	t.Cleanup(func() {
 		serv.Close()

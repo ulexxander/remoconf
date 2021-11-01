@@ -4,27 +4,34 @@ import (
 	"log"
 
 	"github.com/go-chi/chi/v5"
+	"gitlab.com/ulexxander/remoconf/service/projects"
 	"gitlab.com/ulexxander/remoconf/service/users"
 )
 
 type Handler struct {
 	*chi.Mux
 
+	users    *users.Service
+	projects *projects.Service
+
 	logger *log.Logger
-	users  *users.Service
 }
 
-func NewHandler(users *users.Service, logger *log.Logger) *Handler {
+func NewHandler(users *users.Service, projects *projects.Service, logger *log.Logger) *Handler {
 	mux := chi.NewMux()
 
 	h := Handler{
-		Mux:    mux,
-		logger: logger,
-		users:  users,
+		Mux:      mux,
+		users:    users,
+		projects: projects,
+		logger:   logger,
 	}
 
 	mux.Get("/users/{id}", h.getUserByID)
 	mux.Post("/users", h.postUser)
+
+	mux.Get("/projects", h.getProjectsAll)
+	mux.Post("/projects", h.postProject)
 
 	return &h
 }

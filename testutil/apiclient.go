@@ -9,6 +9,9 @@ import (
 	"testing"
 
 	"github.com/pkg/errors"
+	"github.com/stretchr/testify/require"
+	"gitlab.com/ulexxander/remoconf/restapi"
+	"gitlab.com/ulexxander/remoconf/storage"
 )
 
 type APIClient struct {
@@ -70,4 +73,22 @@ func (ac *APIClient) Get(t *testing.T, endpoint string, resBody interface{}) *ht
 
 func (ac *APIClient) Post(t *testing.T, endpoint string, reqBody, resBody interface{}) *http.Response {
 	return ac.Request(t, "POST", endpoint, reqBody, resBody)
+}
+
+func (ac *APIClient) CreateUser(t *testing.T, login, password string) *storage.CreatedItem {
+	var resBody struct {
+		Data storage.CreatedItem
+		restapi.ResponseError
+	}
+	res := ac.Post(t, "/users", storage.UserCreateParams{
+		Login:    login,
+		Password: password,
+	}, &resBody)
+	require.Empty(t, resBody.Error)
+	require.Equal(t, 200, res.StatusCode)
+	return &resBody.Data
+}
+
+func (ac *APIClient) CreateUserDefault(t *testing.T) *storage.CreatedItem {
+	return ac.CreateUser(t, "alex", "123")
 }
