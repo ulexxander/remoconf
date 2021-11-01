@@ -27,16 +27,16 @@ const projectCreateQuery = `INSERT INTO projects (title, description, created_by
 VALUES ($1, $2, $3)
 RETURNING id`
 
-func (s *ProjectsStore) Create(p storage.ProjectCreateParams) (int, error) {
-	var id int
+func (s *ProjectsStore) Create(p storage.ProjectCreateParams) (*storage.CreatedItem, error) {
+	var created storage.CreatedItem
 	if err := s.db.Get(
-		&id,
+		&created,
 		projectCreateQuery,
 		p.Title,
 		p.Description,
 		p.CreatedBy,
 	); err != nil {
-		return 0, err
+		return &created, err
 	}
-	return id, nil
+	return &created, nil
 }

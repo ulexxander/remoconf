@@ -22,7 +22,7 @@ func TestProjectsStore(t *testing.T) {
 
 	title := "my proj"
 	description := "some desc"
-	createdBy, _ := us.Create(storage.UserCreateParams{})
+	user, _ := us.Create(storage.UserCreateParams{})
 
 	var projectID int
 
@@ -37,13 +37,13 @@ func TestProjectsStore(t *testing.T) {
 		})
 
 		t.Run("succeeds", func(t *testing.T) {
-			id, err := ps.Create(storage.ProjectCreateParams{
+			created, err := ps.Create(storage.ProjectCreateParams{
 				Title:       title,
 				Description: description,
-				CreatedBy:   createdBy,
+				CreatedBy:   user.ID,
 			})
 			require.NoError(t, err)
-			projectID = id
+			projectID = created.ID
 		})
 	})
 
@@ -56,7 +56,7 @@ func TestProjectsStore(t *testing.T) {
 		require.Equal(t, title, p[0].Title)
 		require.Equal(t, description, p[0].Description)
 		require.NotZero(t, p[0].CreatedAt)
-		require.Equal(t, createdBy, p[0].CreatedBy)
+		require.Equal(t, user.ID, p[0].CreatedBy)
 		require.Nil(t, p[0].UpdatedAt)
 		require.Nil(t, p[0].UpdatedBy)
 	})

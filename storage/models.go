@@ -50,3 +50,9 @@ type ConfigCreateParams struct {
 	Content   string
 	CreatedBy int
 }
+
+// results
+
+type CreatedItem struct {
+	ID int
+}

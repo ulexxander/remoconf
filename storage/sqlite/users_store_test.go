@@ -25,12 +25,12 @@ func TestUsersStore(t *testing.T) {
 	var userID int
 
 	t.Run("creating user", func(t *testing.T) {
-		id, err := us.Create(storage.UserCreateParams{
+		created, err := us.Create(storage.UserCreateParams{
 			Login:    login,
 			Password: password,
 		})
 		require.NoError(t, err)
-		userID = id
+		userID = created.ID
 	})
 
 	t.Run("getting created user", func(t *testing.T) {

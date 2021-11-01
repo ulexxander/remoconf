@@ -23,8 +23,8 @@ func TestConfigsStore(t *testing.T) {
 
 	version := 1
 	content := "my cfg"
-	createdBy, _ := us.Create(storage.UserCreateParams{})
-	projectID, _ := ps.Create(storage.ProjectCreateParams{CreatedBy: createdBy})
+	user, _ := us.Create(storage.UserCreateParams{})
+	project, _ := ps.Create(storage.ProjectCreateParams{CreatedBy: user.ID})
 
 	var configID int
 
@@ -34,14 +34,14 @@ func TestConfigsStore(t *testing.T) {
 				ProjectID: 4151,
 				Version:   version,
 				Content:   content,
-				CreatedBy: createdBy,
+				CreatedBy: user.ID,
 			})
 			require.Error(t, err)
 		})
 
 		t.Run("fails user does not exist", func(t *testing.T) {
 			_, err := cs.Create(storage.ConfigCreateParams{
-				ProjectID: projectID,
+				ProjectID: project.ID,
 				Version:   version,
 				Content:   content,
 				CreatedBy: 23455,
@@ -50,14 +50,14 @@ func TestConfigsStore(t *testing.T) {
 		})
 
 		t.Run("succeeds", func(t *testing.T) {
-			id, err := cs.Create(storage.ConfigCreateParams{
-				ProjectID: projectID,
+			created, err := cs.Create(storage.ConfigCreateParams{
+				ProjectID: project.ID,
 				Version:   version,
 				Content:   content,
-				CreatedBy: createdBy,
+				CreatedBy: user.ID,
 			})
 			require.NoError(t, err)
-			configID = id
+			configID = created.ID
 		})
 	})
 
@@ -67,10 +67,10 @@ func TestConfigsStore(t *testing.T) {
 		require.Len(t, c, 1)
 
 		require.Equal(t, configID, c[0].ID)
-		require.Equal(t, projectID, c[0].ProjectID)
+		require.Equal(t, project.ID, c[0].ProjectID)
 		require.Equal(t, version, c[0].Version)
 		require.Equal(t, content, c[0].Content)
 		require.NotZero(t, c[0].CreatedAt)
-		require.Equal(t, createdBy, c[0].CreatedBy)
+		require.Equal(t, user.ID, c[0].CreatedBy)
 	})
 }

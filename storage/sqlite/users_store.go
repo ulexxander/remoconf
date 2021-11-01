@@ -27,10 +27,10 @@ const userCreateQuery = `INSERT INTO users (login, password)
 VALUES ($1, $2)
 RETURNING id`
 
-func (s *UsersStore) Create(p storage.UserCreateParams) (int, error) {
-	var id int
-	if err := s.db.Get(&id, userCreateQuery, p.Login, p.Password); err != nil {
-		return 0, err
+func (s *UsersStore) Create(p storage.UserCreateParams) (*storage.CreatedItem, error) {
+	var created storage.CreatedItem
+	if err := s.db.Get(&created, userCreateQuery, p.Login, p.Password); err != nil {
+		return &created, err
 	}
-	return id, nil
+	return &created, nil
 }

@@ -31,5 +31,5 @@ func (h *Handler) postUser(w http.ResponseWriter, r *http.Request) {
 		h.resError(w, err)
 		return
 	}
-	h.resData(w, struct{ ID int }{ID: res})
+	h.resData(w, res)
 }

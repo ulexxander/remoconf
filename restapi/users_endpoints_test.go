@@ -24,9 +24,7 @@ func TestUsersEndpoints(t *testing.T) {
 
 	t.Run("creating user", func(t *testing.T) {
 		var resBody struct {
-			Data struct {
-				ID int
-			}
+			Data storage.CreatedItem
 			restapi.ResponseError
 		}
 		res := client.Post(t, "/users", storage.UserCreateParams{
