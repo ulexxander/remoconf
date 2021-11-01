@@ -1,0 +1,43 @@
+definitions:
+  restapi.ResponseError:
+    properties:
+      Error:
+        type: string
+    type: object
+  storage.User:
+    properties:
+      CreatedAt:
+        type: string
+      ID:
+        type: integer
+      Login:
+        type: string
+      Password:
+        type: string
+      UpdatedAt:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /users/{id}:
+    get:
+      operationId: GetUserByID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/storage.User'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/restapi.ResponseError'
+swagger: "2.0"

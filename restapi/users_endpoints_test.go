@@ -51,7 +51,7 @@ func setupAPIClient(t *testing.T) *testutil.APIClient {
 	us := users.NewService(sqlite.NewUsersStore(db))
 	ps := projects.NewService(sqlite.NewProjectsStore(db))
 	logger := log.New(io.Discard, "", log.LstdFlags)
-	h := restapi.NewHandler(us, ps, logger)
+	h := restapi.NewHandler(us, ps, nil, logger)
 	serv := httptest.NewServer(h)
 	t.Cleanup(func() {
 		serv.Close()

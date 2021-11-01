@@ -6,6 +6,12 @@ import (
 	"gitlab.com/ulexxander/remoconf/storage"
 )
 
+// @ID GetUserByID
+// @Produce  json
+// @Param id path int true "User ID"
+// @Success 200 {object} storage.User
+// @Failure default {object} ResponseError
+// @Router /users/{id} [get]
 func (h *Handler) getUserByID(w http.ResponseWriter, r *http.Request) {
 	id, err := urlParamInt(r, "id")
 	if err != nil {

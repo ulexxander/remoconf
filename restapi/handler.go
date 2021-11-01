@@ -11,21 +11,26 @@ import (
 type Handler struct {
 	*chi.Mux
 
-	users    *users.Service
-	projects *projects.Service
+	users       *users.Service
+	projects    *projects.Service
+	swaggerDocs []byte
 
 	logger *log.Logger
 }
 
-func NewHandler(users *users.Service, projects *projects.Service, logger *log.Logger) *Handler {
+func NewHandler(users *users.Service, projects *projects.Service, swaggerDocs []byte, logger *log.Logger) *Handler {
 	mux := chi.NewMux()
 
 	h := Handler{
-		Mux:      mux,
-		users:    users,
-		projects: projects,
-		logger:   logger,
+		Mux:         mux,
+		users:       users,
+		projects:    projects,
+		swaggerDocs: swaggerDocs,
+		logger:      logger,
 	}
+
+	mux.Get("/swagger/docs.json", h.getSwaggerDocs)
+	mux.Get("/swagger/*", h.getSwaggerWebInterface())
 
 	mux.Get("/users/{id}", h.getUserByID)
 	mux.Post("/users", h.postUser)
