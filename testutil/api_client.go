@@ -92,3 +92,18 @@ func (ac *APIClient) CreateUser(t *testing.T, login, password string) *storage.C
 func (ac *APIClient) CreateUserDefault(t *testing.T) *storage.CreatedItem {
 	return ac.CreateUser(t, "alex", "123")
 }
+
+func (ac *APIClient) CreateProject(t *testing.T, title, description string, createdBy int) *storage.CreatedItem {
+	var resBody struct {
+		Data storage.CreatedItem
+		restapi.ResponseError
+	}
+	res := ac.Post(t, "/projects", storage.ProjectCreateParams{
+		Title:       title,
+		Description: description,
+		CreatedBy:   createdBy,
+	}, &resBody)
+	require.Equal(t, 200, res.StatusCode)
+	require.Empty(t, resBody.Error)
+	return &resBody.Data
+}
