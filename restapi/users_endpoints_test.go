@@ -2,22 +2,16 @@ package restapi_test
 
 import (
 	"fmt"
-	"io"
-	"log"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/restapi"
-	"gitlab.com/ulexxander/remoconf/service/projects"
-	"gitlab.com/ulexxander/remoconf/service/users"
 	"gitlab.com/ulexxander/remoconf/storage"
-	"gitlab.com/ulexxander/remoconf/storage/sqlite"
 	"gitlab.com/ulexxander/remoconf/testutil"
 )
 
 func TestUsersEndpoints(t *testing.T) {
-	client := setupAPIClient(t)
+	client := testutil.SetupRestAPI(t)
 
 	login := "alex"
 	password := "123"
@@ -44,17 +38,4 @@ func TestUsersEndpoints(t *testing.T) {
 		require.NotZero(t, resBody.Data.CreatedAt)
 		require.Nil(t, resBody.Data.UpdatedAt)
 	})
-}
-
-func setupAPIClient(t *testing.T) *testutil.APIClient {
-	db := testutil.SetupDBTest(t)
-	us := users.NewService(sqlite.NewUsersStore(db))
-	ps := projects.NewService(sqlite.NewProjectsStore(db))
-	logger := log.New(io.Discard, "", log.LstdFlags)
-	h := restapi.NewHandler(us, ps, nil, logger)
-	serv := httptest.NewServer(h)
-	t.Cleanup(func() {
-		serv.Close()
-	})
-	return testutil.NewAPIClient(serv)
 }

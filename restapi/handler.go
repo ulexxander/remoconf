@@ -8,35 +8,20 @@ import (
 	"gitlab.com/ulexxander/remoconf/service/users"
 )
 
-type Handler struct {
-	*chi.Mux
-
-	users       *users.Service
-	projects    *projects.Service
-	swaggerDocs []byte
-
-	logger *log.Logger
+type Endpoints struct {
+	Users       *users.Service
+	Projects    *projects.Service
+	SwaggerDocs []byte
+	Logger      *log.Logger
 }
 
-func NewHandler(users *users.Service, projects *projects.Service, swaggerDocs []byte, logger *log.Logger) *Handler {
-	mux := chi.NewMux()
+func (e *Endpoints) Register(m *chi.Mux) {
+	m.Get("/users/{id}", e.GetUserByID)
+	m.Post("/users", e.PostUser)
 
-	h := Handler{
-		Mux:         mux,
-		users:       users,
-		projects:    projects,
-		swaggerDocs: swaggerDocs,
-		logger:      logger,
-	}
+	m.Get("/projects", e.GetProjectsAll)
+	m.Post("/projects", e.PostProject)
 
-	mux.Get("/swagger/docs.json", h.getSwaggerDocs)
-	mux.Get("/swagger/*", h.getSwaggerWebInterface())
-
-	mux.Get("/users/{id}", h.GetUserByID)
-	mux.Post("/users", h.PostUser)
-
-	mux.Get("/projects", h.GetProjectsAll)
-	mux.Post("/projects", h.PostProject)
-
-	return &h
+	m.Get("/swagger/docs.json", e.getSwaggerDocs)
+	m.Get("/swagger/*", e.getSwaggerWebInterface())
 }

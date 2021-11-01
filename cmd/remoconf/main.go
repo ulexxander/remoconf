@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/pkg/errors"
@@ -44,12 +45,19 @@ func run(logger *log.Logger) error {
 		return errors.Wrap(err, "reading swagger")
 	}
 
-	h := restapi.NewHandler(users, projects, []byte(swaggerDocs), logger)
+	e := restapi.Endpoints{
+		Users:       users,
+		Projects:    projects,
+		SwaggerDocs: []byte(swaggerDocs),
+		Logger:      logger,
+	}
+
+	mux := chi.NewMux()
+	e.Register(mux)
 
 	port := ":4000"
-	logger.Println("listening on", port)
-	err = http.ListenAndServe(port, h)
-	if err != nil {
+	logger.Println("starting listening on", port)
+	if err := http.ListenAndServe(port, mux); err != nil {
 		return errors.Wrap(err, "listening http")
 	}
 

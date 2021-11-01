@@ -6,10 +6,11 @@ import (
 	"github.com/stretchr/testify/require"
 	"gitlab.com/ulexxander/remoconf/restapi"
 	"gitlab.com/ulexxander/remoconf/storage"
+	"gitlab.com/ulexxander/remoconf/testutil"
 )
 
 func TestProjectsEndpoints(t *testing.T) {
-	client := setupAPIClient(t)
+	client := testutil.SetupRestAPI(t)
 
 	user := client.CreateUserDefault(t)
 	title := "super proj"

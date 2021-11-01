@@ -13,22 +13,22 @@ type ResponseError struct {
 	Error string
 }
 
-func (h *Handler) resData(w http.ResponseWriter, data interface{}) {
-	h.resJSON(w, ResponseData{
+func (e *Endpoints) resData(w http.ResponseWriter, data interface{}) {
+	e.resJSON(w, ResponseData{
 		Data: data,
 	})
 }
 
-func (h *Handler) resError(w http.ResponseWriter, err error) {
-	h.resJSON(w, ResponseError{
+func (e *Endpoints) resError(w http.ResponseWriter, err error) {
+	e.resJSON(w, ResponseError{
 		Error: err.Error(),
 	})
 }
 
-func (h *Handler) resJSON(w http.ResponseWriter, v interface{}) {
+func (e *Endpoints) resJSON(w http.ResponseWriter, v interface{}) {
 	err := json.NewEncoder(w).Encode(v)
 	if err != nil {
-		h.logger.Printf("failed to write response json: %s", err)
+		e.Logger.Printf("failed to write response json: %s", err)
 		httpError(w, http.StatusInternalServerError)
 	}
 }

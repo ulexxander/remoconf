@@ -10,13 +10,13 @@ import (
 // @Success 200 {object} []storage.Project
 // @Failure default {object} ResponseError
 // @Router /projects [get]
-func (h *Handler) GetProjectsAll(w http.ResponseWriter, r *http.Request) {
-	res, err := h.projects.GetAll()
+func (e *Endpoints) GetProjectsAll(w http.ResponseWriter, r *http.Request) {
+	res, err := e.Projects.GetAll()
 	if err != nil {
-		h.resError(w, err)
+		e.resError(w, err)
 		return
 	}
-	h.resData(w, res)
+	e.resData(w, res)
 }
 
 // @Accept json
@@ -25,16 +25,16 @@ func (h *Handler) GetProjectsAll(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} storage.CreatedItem
 // @Failure default {object} ResponseError
 // @Router /projects [post]
-func (h *Handler) PostProject(w http.ResponseWriter, r *http.Request) {
+func (e *Endpoints) PostProject(w http.ResponseWriter, r *http.Request) {
 	var p storage.ProjectCreateParams
 	if err := bodyJSON(r, &p); err != nil {
-		h.resError(w, err)
+		e.resError(w, err)
 		return
 	}
-	res, err := h.projects.Create(p)
+	res, err := e.Projects.Create(p)
 	if err != nil {
-		h.resError(w, err)
+		e.resError(w, err)
 		return
 	}
-	h.resData(w, res)
+	e.resData(w, res)
 }
