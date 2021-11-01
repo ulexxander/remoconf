@@ -1,6 +1,10 @@
 package users
 
-import "gitlab.com/ulexxander/remoconf/storage"
+import (
+	"github.com/pkg/errors"
+	"gitlab.com/ulexxander/remoconf/storage"
+	"golang.org/x/crypto/bcrypt"
+)
 
 type Service struct {
 	users storage.UsersStore
@@ -15,5 +19,16 @@ func (s *Service) GetByID(id int) (*storage.User, error) {
 }
 
 func (s *Service) Create(p storage.UserCreateParams) (*storage.CreatedItem, error) {
-	return s.users.Create(p)
+	passwordHashed, err := bcrypt.GenerateFromPassword([]byte(p.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, errors.Wrap(err, "hashing password")
+	}
+	created, err := s.users.Create(storage.UserCreateParams{
+		Login:    p.Login,
+		Password: string(passwordHashed),
+	})
+	if err != nil {
+		return nil, errors.Wrap(err, "creating user in db")
+	}
+	return created, nil
 }

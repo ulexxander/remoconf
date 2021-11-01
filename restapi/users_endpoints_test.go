@@ -48,8 +48,7 @@ func TestUsersEndpoints(t *testing.T) {
 
 		require.Equal(t, userID, resBody.Data.ID)
 		require.Equal(t, login, resBody.Data.Login)
-		// TODO: hash
-		require.Equal(t, password, resBody.Data.Password)
+		require.NotEqual(t, password, resBody.Data.Password, "password is hashed")
 		require.NotZero(t, resBody.Data.CreatedAt)
 		require.Nil(t, resBody.Data.UpdatedAt)
 	})
