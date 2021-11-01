@@ -1,12 +1,9 @@
 package restapi_test
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 	"net/http/httptest"
 	"testing"
 
@@ -18,7 +15,7 @@ import (
 )
 
 func TestUsersEndpoints(t *testing.T) {
-	client := setupTestClient(t)
+	client := setupAPIClient(t)
 
 	login := "alex"
 	password := "123"
@@ -59,60 +56,7 @@ func TestUsersEndpoints(t *testing.T) {
 	})
 }
 
-type TestClient struct {
-	serv *httptest.Server
-}
-
-func NewTestClient(serv *httptest.Server) *TestClient {
-	return &TestClient{serv: serv}
-}
-
-func (tc *TestClient) Request(t *testing.T, method, endpoint string, reqBody, resBody interface{}) *http.Response {
-	var bodyReader io.Reader
-	if reqBody != nil {
-		encoded, err := json.Marshal(reqBody)
-		if err != nil {
-			t.Fatalf("could not json marshal body: %s", err)
-		}
-		bodyReader = bytes.NewBuffer(encoded)
-	}
-
-	req, err := http.NewRequest(method, tc.serv.URL+endpoint, bodyReader)
-	if err != nil {
-		t.Fatalf("failed to prepare new request: %s", err)
-	}
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		t.Fatalf("error when doing %s request to %s: %s", method, endpoint, err)
-	}
-
-	b, err := io.ReadAll(res.Body)
-	if err != nil {
-		t.Fatalf("error when reading body: %s", err)
-	}
-
-	err = json.Unmarshal(b, resBody)
-	if err != nil {
-		content := b
-		if len(content) > 100 {
-			content = content[:100]
-		}
-		t.Fatalf("failed to unmarshal body: %s, first 100 bytes: %s", err, content)
-	}
-
-	return res
-}
-
-func (tc *TestClient) Get(t *testing.T, endpoint string, resBody interface{}) *http.Response {
-	return tc.Request(t, "GET", endpoint, nil, resBody)
-}
-
-func (tc *TestClient) Post(t *testing.T, endpoint string, reqBody, resBody interface{}) *http.Response {
-	return tc.Request(t, "POST", endpoint, reqBody, resBody)
-}
-
-func setupTestClient(t *testing.T) *TestClient {
+func setupAPIClient(t *testing.T) *testutil.APIClient {
 	db := testutil.SetupDBTest(t)
 	us := sqlite.NewUsersStore(db)
 	logger := log.New(io.Discard, "", log.LstdFlags)
@@ -121,5 +65,5 @@ func setupTestClient(t *testing.T) *TestClient {
 	t.Cleanup(func() {
 		serv.Close()
 	})
-	return &TestClient{serv}
+	return testutil.NewAPIClient(serv)
 }
