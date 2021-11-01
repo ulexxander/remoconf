@@ -9,6 +9,32 @@ definitions:
       ID:
         type: integer
     type: object
+  storage.Project:
+    properties:
+      CreatedAt:
+        type: string
+      CreatedBy:
+        type: integer
+      Description:
+        type: string
+      ID:
+        type: integer
+      Title:
+        type: string
+      UpdatedAt:
+        type: string
+      UpdatedBy:
+        type: integer
+    type: object
+  storage.ProjectCreateParams:
+    properties:
+      CreatedBy:
+        type: integer
+      Description:
+        type: string
+      Title:
+        type: string
+    type: object
   storage.User:
     properties:
       CreatedAt:
@@ -32,11 +58,46 @@ definitions:
 info:
   contact: {}
 paths:
+  /projects:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/storage.Project'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/restapi.ResponseError'
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Project Create Params
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/storage.ProjectCreateParams'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/storage.CreatedItem'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/restapi.ResponseError'
   /users:
     post:
       consumes:
       - application/json
-      operationId: PostUser
       parameters:
       - description: User Create Params
         in: body
@@ -57,7 +118,6 @@ paths:
             $ref: '#/definitions/restapi.ResponseError'
   /users/{id}:
     get:
-      operationId: GetUserByID
       parameters:
       - description: User ID
         in: path

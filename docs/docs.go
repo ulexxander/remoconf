@@ -23,6 +23,63 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/projects": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/storage.Project"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/restapi.ResponseError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "Project Create Params",
+                        "name": "params",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/storage.ProjectCreateParams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/storage.CreatedItem"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/restapi.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "post": {
                 "consumes": [
@@ -31,7 +88,6 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "operationId": "PostUser",
                 "parameters": [
                     {
                         "description": "User Create Params",
@@ -64,7 +120,6 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "operationId": "GetUserByID",
                 "parameters": [
                     {
                         "type": "integer",
@@ -105,6 +160,46 @@ var doc = `{
             "properties": {
                 "ID": {
                     "type": "integer"
+                }
+            }
+        },
+        "storage.Project": {
+            "type": "object",
+            "properties": {
+                "CreatedAt": {
+                    "type": "string"
+                },
+                "CreatedBy": {
+                    "type": "integer"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string"
+                },
+                "UpdatedAt": {
+                    "type": "string"
+                },
+                "UpdatedBy": {
+                    "type": "integer"
+                }
+            }
+        },
+        "storage.ProjectCreateParams": {
+            "type": "object",
+            "properties": {
+                "CreatedBy": {
+                    "type": "integer"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "Title": {
+                    "type": "string"
                 }
             }
         },

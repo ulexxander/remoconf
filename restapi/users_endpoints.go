@@ -6,7 +6,6 @@ import (
 	"gitlab.com/ulexxander/remoconf/storage"
 )
 
-// @ID GetUserByID
 // @Produce json
 // @Param id path int true "User ID"
 // @Success 200 {object} storage.User
@@ -26,7 +25,6 @@ func (h *Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	h.resData(w, res)
 }
 
-// @ID PostUser
 // @Accept json
 // @Produce json
 // @Param params body storage.UserCreateParams true "User Create Params"
