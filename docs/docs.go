@@ -23,6 +23,65 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/configs": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "operationId": "GetConfigsAll",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/storage.Config"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/restapi.ResponseError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "operationId": "PostConfig",
+                "parameters": [
+                    {
+                        "description": "Config Create Params",
+                        "name": "params",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/configs.ConfigCreateParams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/storage.CreatedItem"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/restapi.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/projects": {
             "get": {
                 "produces": [
@@ -151,11 +210,48 @@ var doc = `{
         }
     },
     "definitions": {
+        "configs.ConfigCreateParams": {
+            "type": "object",
+            "properties": {
+                "Content": {
+                    "type": "string"
+                },
+                "CreatedBy": {
+                    "type": "integer"
+                },
+                "ProjectID": {
+                    "type": "integer"
+                }
+            }
+        },
         "restapi.ResponseError": {
             "type": "object",
             "properties": {
                 "Error": {
                     "type": "string"
+                }
+            }
+        },
+        "storage.Config": {
+            "type": "object",
+            "properties": {
+                "Content": {
+                    "type": "string"
+                },
+                "CreatedAt": {
+                    "type": "string"
+                },
+                "CreatedBy": {
+                    "type": "integer"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "ProjectID": {
+                    "type": "integer"
+                },
+                "Version": {
+                    "type": "integer"
                 }
             }
         },
