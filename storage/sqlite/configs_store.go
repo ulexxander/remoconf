@@ -23,6 +23,17 @@ func (s *ConfigsStore) GetAll() ([]storage.Config, error) {
 	return items, nil
 }
 
+const configGetByProjectQuery = `SELECT * FROM configs
+WHERE project_id = $1`
+
+func (s *ConfigsStore) GetByProject(id int) ([]storage.Config, error) {
+	var items []storage.Config
+	if err := s.db.Select(&items, configGetByProjectQuery, id); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const configCreateQuery = `INSERT INTO configs (project_id, version, content, created_by)
 VALUES ($1, $2, $3, $4)
 RETURNING id`

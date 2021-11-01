@@ -12,5 +12,6 @@ type ProjectsStore interface {
 
 type ConfigsStore interface {
 	GetAll() ([]Config, error)
+	GetByProject(id int) ([]Config, error)
 	Create(p ConfigCreateParams) (*CreatedItem, error)
 }
