@@ -4,17 +4,17 @@ import (
 	"log"
 
 	"github.com/go-chi/chi/v5"
-	"gitlab.com/ulexxander/remoconf/storage/sqlite"
+	"gitlab.com/ulexxander/remoconf/storage"
 )
 
 type Handler struct {
 	*chi.Mux
 
 	logger     *log.Logger
-	usersStore *sqlite.UsersStore
+	usersStore storage.UsersStore
 }
 
-func NewHandler(us *sqlite.UsersStore, logger *log.Logger) *Handler {
+func NewHandler(us storage.UsersStore, logger *log.Logger) *Handler {
 	mux := chi.NewMux()
 
 	h := Handler{
