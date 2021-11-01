@@ -15,9 +15,9 @@ func NewProjectsStore(db *sqlx.DB) *ProjectsStore {
 
 const projectsGetAllQuery = `SELECT * FROM projects`
 
-func (ps *ProjectsStore) GetAll() ([]storage.Project, error) {
+func (s *ProjectsStore) GetAll() ([]storage.Project, error) {
 	var items []storage.Project
-	if err := ps.db.Select(&items, projectsGetAllQuery); err != nil {
+	if err := s.db.Select(&items, projectsGetAllQuery); err != nil {
 		return nil, err
 	}
 	return items, nil
@@ -27,9 +27,9 @@ const projectCreateQuery = `INSERT INTO projects (title, description, created_by
 VALUES ($1, $2, $3)
 RETURNING id`
 
-func (ps *ProjectsStore) Create(p storage.ProjectCreateParams) (int, error) {
+func (s *ProjectsStore) Create(p storage.ProjectCreateParams) (int, error) {
 	var id int
-	if err := ps.db.Get(
+	if err := s.db.Get(
 		&id,
 		projectCreateQuery,
 		p.Title,

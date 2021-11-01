@@ -15,9 +15,9 @@ func NewConfigsStore(db *sqlx.DB) *ConfigsStore {
 
 const configsGetAllQuery = `SELECT * FROM configs`
 
-func (us *ConfigsStore) GetAll() ([]storage.Config, error) {
+func (s *ConfigsStore) GetAll() ([]storage.Config, error) {
 	var items []storage.Config
-	if err := us.db.Select(&items, configsGetAllQuery); err != nil {
+	if err := s.db.Select(&items, configsGetAllQuery); err != nil {
 		return nil, err
 	}
 	return items, nil
@@ -27,9 +27,9 @@ const configCreateQuery = `INSERT INTO configs (project_id, version, content, cr
 VALUES ($1, $2, $3, $4)
 RETURNING id`
 
-func (us *ConfigsStore) Create(p storage.ConfigCreateParams) (int, error) {
+func (s *ConfigsStore) Create(p storage.ConfigCreateParams) (int, error) {
 	var id int
-	if err := us.db.Get(
+	if err := s.db.Get(
 		&id,
 		configCreateQuery,
 		p.ProjectID,

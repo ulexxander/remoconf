@@ -15,9 +15,9 @@ func NewUsersStore(db *sqlx.DB) *UsersStore {
 
 const userGetByIDQuery = `SELECT * FROM users WHERE id = $1`
 
-func (us *UsersStore) GetByID(id int) (*storage.User, error) {
+func (s *UsersStore) GetByID(id int) (*storage.User, error) {
 	var item storage.User
-	if err := us.db.Get(&item, userGetByIDQuery, id); err != nil {
+	if err := s.db.Get(&item, userGetByIDQuery, id); err != nil {
 		return nil, err
 	}
 	return &item, nil
@@ -27,9 +27,9 @@ const userCreateQuery = `INSERT INTO users (login, password)
 VALUES ($1, $2)
 RETURNING id`
 
-func (us *UsersStore) Create(p storage.UserCreateParams) (int, error) {
+func (s *UsersStore) Create(p storage.UserCreateParams) (int, error) {
 	var id int
-	if err := us.db.Get(&id, userCreateQuery, p.Login, p.Password); err != nil {
+	if err := s.db.Get(&id, userCreateQuery, p.Login, p.Password); err != nil {
 		return 0, err
 	}
 	return id, nil
