@@ -1,0 +1,11 @@
+{
+  "name": "remoconf-frontend",
+  "version": "0.0.0",
+  "license": "Apache License 2.0",
+  "scripts": {
+    "swagger": "openapi-typescript ../docs/swagger.json -o ./swagger.ts"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^4.4.0"
+  }
+}
