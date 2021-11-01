@@ -19,7 +19,9 @@ func urlParamInt(r *http.Request, key string) (int, error) {
 }
 
 func bodyJSON(r *http.Request, reqBody interface{}) error {
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
+	dec := json.NewDecoder(r.Body)
+	dec.DisallowUnknownFields()
+	err := dec.Decode(&reqBody)
 	if err != nil {
 		return errors.Wrap(err, "decoding body json")
 	}
