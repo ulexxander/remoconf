@@ -19,20 +19,29 @@ func TestUsersStore(t *testing.T) {
 		require.Nil(t, u)
 	})
 
-	var createdUserID int
+	login := "alex"
+	password := "123"
+
+	var userID int
 
 	t.Run("creating user", func(t *testing.T) {
 		id, err := us.Create(storage.UserCreateParams{
-			Login:    "alex",
-			Password: "123",
+			Login:    login,
+			Password: password,
 		})
 		require.NoError(t, err)
-		createdUserID = id
+		userID = id
 	})
 
 	t.Run("getting created user", func(t *testing.T) {
-		u, err := us.GetByID(createdUserID)
+		u, err := us.GetByID(userID)
 		require.NoError(t, err)
 		require.NotNil(t, u)
+
+		require.Equal(t, userID, u.ID)
+		require.Equal(t, login, u.Login)
+		require.Equal(t, password, u.Password)
+		require.NotZero(t, u.CreatedAt)
+		require.Nil(t, u.UpdatedAt)
 	})
 }
