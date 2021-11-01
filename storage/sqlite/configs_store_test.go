@@ -76,14 +76,24 @@ func TestConfigsStore(t *testing.T) {
 	})
 
 	t.Run("configs by project", func(t *testing.T) {
-		created, _ := cs.Create(storage.ConfigCreateParams{
+		created1, _ := cs.Create(storage.ConfigCreateParams{
 			ProjectID: project2.ID,
+			Version:   1,
+			CreatedBy: user.ID,
+		})
+		created2, _ := cs.Create(storage.ConfigCreateParams{
+			ProjectID: project2.ID,
+			Version:   2,
 			CreatedBy: user.ID,
 		})
 
 		c, err := cs.GetByProject(project2.ID)
 		require.NoError(t, err)
-		require.Len(t, c, 1)
-		require.Equal(t, created.ID, c[0].ID)
+		require.Len(t, c, 2)
+
+		t.Run("orders by version ascending", func(t *testing.T) {
+			require.Equal(t, created1.ID, c[0].ID)
+			require.Equal(t, created2.ID, c[1].ID)
+		})
 	})
 }

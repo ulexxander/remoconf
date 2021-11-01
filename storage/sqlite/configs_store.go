@@ -24,7 +24,8 @@ func (s *ConfigsStore) GetAll() ([]storage.Config, error) {
 }
 
 const configGetByProjectQuery = `SELECT * FROM configs
-WHERE project_id = $1`
+WHERE project_id = $1
+ORDER BY version ASC`
 
 func (s *ConfigsStore) GetByProject(id int) ([]storage.Config, error) {
 	var items []storage.Config
