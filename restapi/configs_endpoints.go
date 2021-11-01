@@ -3,7 +3,7 @@ package restapi
 import (
 	"net/http"
 
-	"gitlab.com/ulexxander/remoconf/storage"
+	"gitlab.com/ulexxander/remoconf/service/configs"
 )
 
 // @ID GetConfigsAll
@@ -23,12 +23,12 @@ func (e *Endpoints) GetConfigsAll(w http.ResponseWriter, r *http.Request) {
 // @ID PostConfig
 // @Accept json
 // @Produce json
-// @Param params body storage.ConfigCreateParams true "Config Create Params"
+// @Param params body configs.ConfigCreateParams true "Config Create Params"
 // @Success 200 {object} storage.CreatedItem
 // @Failure default {object} ResponseError
 // @Router /configs [post]
 func (e *Endpoints) PostConfig(w http.ResponseWriter, r *http.Request) {
-	var p storage.ConfigCreateParams
+	var p configs.ConfigCreateParams
 	if err := bodyJSON(r, &p); err != nil {
 		e.resError(w, err)
 		return
