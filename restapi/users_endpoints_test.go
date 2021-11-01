@@ -25,7 +25,7 @@ func TestUsersEndpoints(t *testing.T) {
 
 	t.Run("getting created user", func(t *testing.T) {
 		var resBody struct {
-			Data storage.User
+			Data *storage.User
 			restapi.ResponseError
 		}
 		res := client.Get(t, fmt.Sprintf("/users/%d", userID), &resBody)

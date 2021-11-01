@@ -20,7 +20,7 @@ func TestProjectsEndpoints(t *testing.T) {
 
 	t.Run("creating project", func(t *testing.T) {
 		var resBody struct {
-			Data storage.CreatedItem
+			Data *storage.CreatedItem
 			restapi.ResponseError
 		}
 		res := client.Post(t, "/projects", storage.ProjectCreateParams{

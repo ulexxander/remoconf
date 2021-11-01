@@ -77,7 +77,7 @@ func (ac *APIClient) Post(t *testing.T, endpoint string, reqBody, resBody interf
 
 func (ac *APIClient) CreateUser(t *testing.T, login, password string) *storage.CreatedItem {
 	var resBody struct {
-		Data storage.CreatedItem
+		Data *storage.CreatedItem
 		restapi.ResponseError
 	}
 	res := ac.Post(t, "/users", storage.UserCreateParams{
@@ -86,7 +86,7 @@ func (ac *APIClient) CreateUser(t *testing.T, login, password string) *storage.C
 	}, &resBody)
 	require.Empty(t, resBody.Error)
 	require.Equal(t, 200, res.StatusCode)
-	return &resBody.Data
+	return resBody.Data
 }
 
 func (ac *APIClient) CreateUserDefault(t *testing.T) *storage.CreatedItem {
@@ -95,7 +95,7 @@ func (ac *APIClient) CreateUserDefault(t *testing.T) *storage.CreatedItem {
 
 func (ac *APIClient) CreateProject(t *testing.T, title, description string, createdBy int) *storage.CreatedItem {
 	var resBody struct {
-		Data storage.CreatedItem
+		Data *storage.CreatedItem
 		restapi.ResponseError
 	}
 	res := ac.Post(t, "/projects", storage.ProjectCreateParams{
@@ -105,5 +105,5 @@ func (ac *APIClient) CreateProject(t *testing.T, title, description string, crea
 	}, &resBody)
 	require.Equal(t, 200, res.StatusCode)
 	require.Empty(t, resBody.Error)
-	return &resBody.Data
+	return resBody.Data
 }
